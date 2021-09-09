@@ -1,10 +1,7 @@
 import React from "react";
-import s from './header.module.css';
+import s from "./header.module.css";
 
-const Header = ({
-  title,
-  descr
-}) => {
+const Header = ({ title, descr }) => {
   return (
     <header className={s.root}>
       <div className={s.forest}></div>
