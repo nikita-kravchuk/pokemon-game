@@ -36,7 +36,18 @@ function App() {
         </p>
       </Layout>
       <Layout title="Cards" colorBg="#fff000">
-        <div className="flex">{POKE.map((item) => <PokemonCard key={item.id} {...item}/>)}</div>
+        <div className="flex">
+          {POKE.map((item) => (
+            <PokemonCard
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              img={item.img}
+              type={item.type}
+              values={item.values}
+            />
+          ))}
+        </div>
       </Layout>
       <Layout title="This is third block" urlBg>
         <img src={logo} alt="logo" />
