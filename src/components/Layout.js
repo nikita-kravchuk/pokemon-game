@@ -2,7 +2,7 @@ import React from "react";
 import bgImg from "../img/bg1.jpeg";
 import s from "./layout.module.css";
 
-const Layout = ({ title, desc, urlBg = "", colorBg }) => {
+const Layout = ({ title, urlBg = "", colorBg, children }) => {
   return (
     <section
       className={s.root}
@@ -19,7 +19,7 @@ const Layout = ({ title, desc, urlBg = "", colorBg }) => {
             <span className={s.separator}></span>
           </div>
           <div className={`{${s.desc}, ${s.full}}`}>
-            <p>{desc}</p>
+            <p>{children}</p>
           </div>
         </article>
       </div>

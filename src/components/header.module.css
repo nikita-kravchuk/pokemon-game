@@ -80,6 +80,7 @@
     font-style: italic;
     color: #fafafa;
     line-height: 65px;
+    text-align: center;
 }
 
 .container p {
@@ -87,4 +88,5 @@
     font-weight: normal;
     color: #fafafa;
     line-height: 32px;
+    text-align: center;
 }
