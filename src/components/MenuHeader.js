@@ -5,9 +5,10 @@ import NavBar from "../utils/Navbar";
 const MenuHeader = () => {
   const [isActive, setActive] = useState(false);
 
+
   return (
     <>
-      <Menu isActive={isActive} setActive={setActive}/>
+      <Menu isActive={isActive} />
       <NavBar isActive={isActive} setActive={setActive}/>
     </>
   );
