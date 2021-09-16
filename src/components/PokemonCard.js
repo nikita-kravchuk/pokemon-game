@@ -1,17 +1,23 @@
-import React, { useState }  from "react";
+import React from "react";
 import cardBack from "../img/card-back-side.jpeg";
-import cn from 'classnames';
+import cn from "classnames";
 import s from "./pokemonCard.module.css";
 
-const PokemonCard = ({name, id, img, type, values}) => {
-    const [isActive, setActive] = useState(false);
-
-    const toggleClass = () => {
-        setActive(!isActive);
-      };
+const PokemonCard = ({
+  name,
+  id,
+  img,
+  type,
+  values,
+  isActive,
+  onClickPokemon,
+}) => {
+  const handleClick = () => {
+    onClickPokemon && onClickPokemon(id);
+  };
   return (
-    <div className={s.root} onClick={toggleClass}>
-      <div className={cn(s.pokemonCard, {[s.active]: isActive})}>
+    <div className={s.root} onClick={handleClick}>
+      <div className={cn(s.pokemonCard, { [s.active]: isActive })}>
         <div className={s.cardFront}>
           <div className={cn(s.wrap, s.front)}>
             <div className={cn(s.pokemon, s[type])}>
@@ -27,7 +33,9 @@ const PokemonCard = ({name, id, img, type, values}) => {
               <div className={s.info}>
                 <span className={s.number}>#{id}</span>
                 <h3 className={s.name}>{name}</h3>
-                <small className={s.type}>Type: <span>{type}</span></small>
+                <small className={s.type}>
+                  Type: <span>{type}</span>
+                </small>
               </div>
             </div>
           </div>

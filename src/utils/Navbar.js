@@ -3,22 +3,17 @@ import s from "./navbar.module.css";
 import cn from "classnames";
 import logo from "../img/logo.png";
 
-const NavBar = ({isActive, setActive}) => {
-    const handleClick = () => {
-    !isActive ? setActive(true) : setActive(false)
-  }
-
+const NavBar = ({ isOpen, bgActive = false, onClickHam }) => {
   return (
-    <nav className={s.root} isActive={isActive}>
+    <nav id={s.navbar} className={cn({ [s.bgActive]: bgActive })}>
       <div className={s.navWrapper}>
         <img src={logo} alt="logo" />
-        <a
-          href="#s"
-          className={cn(s.menuButton, {[s.active]: isActive})}
-          onClick={handleClick}
+        <div
+          className={cn(s.menuButton, { [s.active]: isOpen })}
+          onClick={onClickHam}
         >
           <span />
-        </a>
+        </div>
       </div>
     </nav>
   );
