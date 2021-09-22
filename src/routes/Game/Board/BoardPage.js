@@ -8,7 +8,11 @@ const BoardPage = () => {
   return (
     <div className={s.root}>
       <div className={s.playerOne}>
+<<<<<<< HEAD
         {Object.values(pokemons).map(({ id, name, img, type, values }) => (
+=======
+        {Object.values(pokemons).map(({id, name, img, type, values}) => (
+>>>>>>> 691d9708192d742d9b8a3f1ff6ca88ded5f2337e
           <PokemonCard
             className={s.card}
             key={id}
