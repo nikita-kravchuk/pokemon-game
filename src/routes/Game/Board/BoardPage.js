@@ -5,6 +5,7 @@ import s from "./boardPage.module.css";
 import { useHistory } from "react-router";
 import PlayerBoard from "./component/PlayerBoard";
 
+
 const counterWin = (board, playerOne, playerTwo) => {
   let playerOneCount = playerOne.length;
   let playerTwoCount = playerTwo.length;
@@ -21,7 +22,7 @@ const counterWin = (board, playerOne, playerTwo) => {
 };
 
 const BoardPage = () => {
-  const { pokemons, pokemons2 } = useContext(PokemonContext);
+  const { pokemons, PlayerTwoContext } = useContext(PokemonContext);
   const [board, setBoard] = useState([]);
   const [playerOne, setPlayerOne] = useState(() => {
     return Object.values(pokemons).map((item) => ({
@@ -35,27 +36,30 @@ const BoardPage = () => {
   const history = useHistory();
 
   useEffect(() => {
-    async function fetchData(){
+    async function fetchData() {
       const response = await fetch(
         "https://reactmarathon-api.netlify.app/api/board"
       );
       const boardRequest = await response.json();
-  
+
       setBoard(boardRequest.data);
       const playerTwoResponse = await fetch(
         "https://reactmarathon-api.netlify.app/api/create-player"
       );
       const playerTwoRequest = await playerTwoResponse.json();
-  
+
       setPlayerTwo(() => {
         return playerTwoRequest.data.map((item) => ({
           ...item,
           possession: "red",
         }));
       });
+      PlayerTwoContext.setPlayerTwoPokemons(playerTwoRequest.data.map(item => ({...item})));
     }
     fetchData();
   }, []);
+
+  
 
   const handleClickBoard = async (position) => {
     if (choiseCard) {
@@ -108,12 +112,12 @@ const BoardPage = () => {
       } else {
         alert("DRAW");
       }
-      history.push('/game/finish')
+      history.push("/game/finish");
     }
   }, [board, playerOne, playerTwo, steps, history]);
 
-  if(Object.keys(pokemons).length === 0){
-    history.replace('/game')
+  if (Object.keys(pokemons).length === 0) {
+    history.replace("/game");
   }
 
   return (
