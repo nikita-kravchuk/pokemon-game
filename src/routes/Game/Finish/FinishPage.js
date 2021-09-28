@@ -12,10 +12,9 @@ const FinishPage = () => {
   const history = useHistory();
 
   const handleClickRestart = () => {
-    history.push("/game");
-    console.log('Select', selectPokemon)
-    firebase.addPokemon(selectPokemon)
     clean();
+    firebase.addPokemon(selectPokemon)
+    history.push("/game");
   };
 
   const handleSelectedClick = () => {
