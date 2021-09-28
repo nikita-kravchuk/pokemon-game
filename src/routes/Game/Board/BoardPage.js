@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { PokemonContext } from "../../../data/pokemonContext";
 import PokemonCard from "../../../components/PokemonCard";
-import s from "./boardPage.module.css";
+
 import { useHistory } from "react-router";
 import PlayerBoard from "./component/PlayerBoard";
 
+import s from "./boardPage.module.css";
 
 const counterWin = (board, playerOne, playerTwo) => {
   let playerOneCount = playerOne.length;

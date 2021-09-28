@@ -1,26 +1,35 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import PokemonCard from "../../../components/PokemonCard";
-import s from "./startPage.module.css";
-import { FireBaseContext } from "../../../data/firebaseContext";
-import { PokemonContext } from "../../../data/pokemonContext";
+
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getPokemonsAsync,
+  selectPokemonsData,
+  selectPokemonsForBattle,
+  handleSelectedPokemons,
+} from "../../../store/pokemon";
+
+import s from "./startPage.module.css";
 
 const StartPage = () => {
-  const firebase = useContext(FireBaseContext);
-  const pokemonContext = useContext(PokemonContext);
-  const [pokemons, setPokemons] = useState({});
+  const pokemonsRedux = useSelector(selectPokemonsData);
+  const pokemonsForBattle = useSelector(selectPokemonsForBattle);
+  const dispatch = useDispatch();
   const history = useHistory();
+  const [pokemons, setPokemons] = useState({});
 
   useEffect(() => {
-    firebase.getPokemonSoket((pokemons) => {
-      setPokemons(pokemons);
-    });
-    return () => firebase.offPokemonSoket();
-  }, [firebase]);
+    dispatch(getPokemonsAsync());
+  }, []);
+
+  useEffect(() => {
+    setPokemons(pokemonsRedux);
+  }, [pokemonsRedux]);
 
   const handleOpenSelected = (key) => {
     const pokemon = { ...pokemons[key] };
-    pokemonContext.onSelectedPokemons(key, pokemon);
+    dispatch(handleSelectedPokemons({ key, pokemon }));
     setPokemons((prevState) => ({
       ...prevState,
       [key]: {
@@ -38,7 +47,7 @@ const StartPage = () => {
     <div className={s.buttonWrap}>
       <button
         onClick={handleStartGame}
-        disabled={Object.keys(pokemonContext.pokemons).length < 5}
+        disabled={Object.keys(pokemonsForBattle).length < 5}
       >
         Start Game
       </button>
@@ -55,14 +64,7 @@ const StartPage = () => {
               values={values}
               isActive={true}
               isSelected={selected}
-              onClickPokemon={() => {
-                if (
-                  Object.keys(pokemonContext.pokemons).length < 5 ||
-                  selected
-                ) {
-                  handleOpenSelected(key);
-                }
-              }}
+              onClickPokemon={handleOpenSelected}
             />
           )
         )}
