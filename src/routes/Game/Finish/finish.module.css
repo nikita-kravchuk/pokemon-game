@@ -1,0 +1,17 @@
+.card {
+    height: 250px;
+    width: 100%;
+    cursor: pointer;
+    margin: 0 20px 0 20px;
+  }
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .buttonWrap {
+    text-align: center;
+    padding: 2rem;
+  }
