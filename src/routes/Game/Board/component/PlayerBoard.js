@@ -3,11 +3,12 @@ import cn from "classnames";
 import s from "./playerBoard.module.css";
 import { useState } from "react";
 
+
 const PlayerBoard = ({ player, cards, onClickCard }) => {
   const [isSelected, setSelected] = useState(null);
   return (
     <>
-      {cards.map((item) => (
+      {Object.values(cards).map((item) => (
         <div
           className={cn(s.card, { [s.selected]: isSelected === item.id })}
           onClick={() => {

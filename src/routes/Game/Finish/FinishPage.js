@@ -1,31 +1,48 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import PokemonCard from "../../../components/PokemonCard";
-import { FireBaseContext } from "../../../data/firebaseContext";
-import { PokemonContext } from "../../../data/pokemonContext";
+import FirebaseClass from "../../../data/database";
+
+import { selectSecPokemonsData } from "../../../store/player2pokemon";
+import { clearPokemons, selectPokemonsData } from "../../../store/pokemon";
 import s from "./finish.module.css";
 
 const FinishPage = () => {
-  const { pokemons, PlayerTwoContext, clean } = useContext(PokemonContext);
-  const firebase = useContext(FireBaseContext);
-  const {selectPokemon, setSelectedPokemon} = useState({})
+  const player1Poks = useSelector(selectPokemonsData);
+  const player2Poks = useSelector(selectSecPokemonsData);
+  const dispatch = useDispatch();
+  const { selectPokemon, setSelectedPokemon } = useState({});
   const history = useHistory();
 
+  if (Object.keys(player1Poks).length === 0 && Object.keys(player2Poks).length === 0  ) {
+    history.replace("/game");
+  }
+
   const handleClickRestart = () => {
-    clean();
-    firebase.addPokemon(selectPokemon)
+    dispatch(clearPokemons());
+    FirebaseClass.addPokemon(selectPokemon);
     history.push("/game");
   };
 
-  const handleSelectedClick = () => {
-    
-  }
-
+  const handleSelectedClick = (key) => {
+    setSelectedPokemon(prevState => {
+      return prevState.reduce((acc, item) => {
+        item.isSelected = false;
+        if(item.id === key){
+          setSelectedPokemon(item);
+          item.isSelected = true;
+        }
+        acc.push(item);
+        return acc;
+      }, [])
+    })
+  };
 
   return (
     <>
       <div className={s.flex}>
-        {Object.values(pokemons).map((item) => {
+        {Object.values(player1Poks).map((item) => {
           return (
             <PokemonCard
               key={item.key}
@@ -45,7 +62,7 @@ const FinishPage = () => {
         <button onClick={handleClickRestart}>End Game</button>
       </div>
       <div className={s.flex}>
-        {PlayerTwoContext.playerTwoPokemons.map((item) => {
+        {Object.values(player2Poks.data).map((item) => {
           return (
             <PokemonCard
               key={item.key}
@@ -58,7 +75,7 @@ const FinishPage = () => {
               isActive
               minimize
               isSelected={item.selected}
-              handleSelectedClick={handleSelectedClick}
+              onClickPokemon={handleSelectedClick}
             />
           );
         })}
