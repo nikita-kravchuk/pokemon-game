@@ -8,6 +8,8 @@ export const slice = createSlice({
     data: {},
     error: null,
     selectedPokemons: {},
+    enemyPokemon: {},
+    winner: null
   },
   reducers: {
     fetchPokemons: (state) => ({
@@ -25,7 +27,7 @@ export const slice = createSlice({
       data: {},
       error: action.payload,
     }),
-    handleSelectedPokemons: (state, { payload: { pokemon, key } }) => {
+    handleSelectedPokemons: (state, { payload: { key, pokemon } }) => {
       const newPokemons = { ...state.selectedPokemons };
       if (newPokemons[key]) {
         delete newPokemons[key];
@@ -36,9 +38,17 @@ export const slice = createSlice({
       return { ...state, selectedPokemons: newPokemons };
     },
 
+    handleSelectedPokemonEnemy: (state, action) => {
+      return {
+        state,
+        enemyPokemon: { ...action.payload },
+      };
+    },
+
     clearPokemons: (state) => ({
       ...state,
-      data: {},
+      selectedPokemons: {},
+      enemyPokemon: {}
     }),
   },
 });
@@ -48,12 +58,15 @@ export const {
   fetchPokemonsResolve,
   fetchPokemonsReject,
   handleSelectedPokemons,
+  handleSelectedPokemonEnemy,
+  clearPokemons,
 } = slice.actions;
 
 export const selectPokemonsLoading = (state) => state.pokemons.isLoading;
 export const selectPokemonsData = (state) => state.pokemons.data;
 export const selectPokemonsForBattle = (state) =>
   state.pokemons.selectedPokemons;
+export const selectEnenemyPokemon = (state) => state.pokemons.enemyPokemon;
 
 export const getPokemonsAsync = () => async (dispatch) => {
   dispatch(fetchPokemons());

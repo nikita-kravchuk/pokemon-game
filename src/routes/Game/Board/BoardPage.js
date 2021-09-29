@@ -1,11 +1,16 @@
-import { useContext, useEffect, useState } from "react";
-import { PokemonContext } from "../../../data/pokemonContext";
+import { useEffect, useState } from "react";
 import PokemonCard from "../../../components/PokemonCard";
-
 import { useHistory } from "react-router";
 import PlayerBoard from "./component/PlayerBoard";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPokemonsForBattle } from "../../../store/pokemon";
+import {
+  getSecPokemons,
+  selectSecPokemonsData,
+} from "../../../store/player2pokemon";
 
 import s from "./boardPage.module.css";
+
 
 const counterWin = (board, playerOne, playerTwo) => {
   let playerOneCount = playerOne.length;
@@ -23,7 +28,9 @@ const counterWin = (board, playerOne, playerTwo) => {
 };
 
 const BoardPage = () => {
-  const { pokemons, PlayerTwoContext } = useContext(PokemonContext);
+  const pokemons = useSelector(selectPokemonsForBattle);
+  const pokemonsSecRedux = useSelector(selectSecPokemonsData);
+  console.log('pokRed', pokemonsSecRedux)
   const [board, setBoard] = useState([]);
   const [playerOne, setPlayerOne] = useState(() => {
     return Object.values(pokemons).map((item) => ({
@@ -35,8 +42,10 @@ const BoardPage = () => {
   const [choiseCard, setChoiseCard] = useState(null);
   const [steps, setSteps] = useState(0);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(getSecPokemons());
     async function fetchData() {
       const response = await fetch(
         "https://reactmarathon-api.netlify.app/api/board"
@@ -44,23 +53,18 @@ const BoardPage = () => {
       const boardRequest = await response.json();
 
       setBoard(boardRequest.data);
-      const playerTwoResponse = await fetch(
-        "https://reactmarathon-api.netlify.app/api/create-player"
-      );
-      const playerTwoRequest = await playerTwoResponse.json();
-
-      setPlayerTwo(() => {
-        return playerTwoRequest.data.map((item) => ({
-          ...item,
-          possession: "red",
-        }));
-      });
-      PlayerTwoContext.setPlayerTwoPokemons(playerTwoRequest.data.map(item => ({...item})));
     }
     fetchData();
   }, []);
 
-  
+  useEffect(() => {
+    setPlayerTwo(() => {
+      return pokemonsSecRedux.data.map((item) => ({
+        ...item,
+        possession: "red",
+      }));
+    });
+  }, [pokemonsSecRedux]);
 
   const handleClickBoard = async (position) => {
     if (choiseCard) {
@@ -108,6 +112,7 @@ const BoardPage = () => {
       const [count1, count2] = counterWin(board, playerOne, playerTwo);
       if (count1 > count2) {
         alert("WIN");
+        
       } else if (count1 < count2) {
         alert("LOSE");
       } else {

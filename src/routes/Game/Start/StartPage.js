@@ -28,13 +28,15 @@ const StartPage = () => {
   }, [pokemonsRedux]);
 
   const handleOpenSelected = (key) => {
+    if (!pokemons[key]?.selected && Object.keys(pokemonsForBattle).length >= 5)
+      return;
     const pokemon = { ...pokemons[key] };
     dispatch(handleSelectedPokemons({ key, pokemon }));
     setPokemons((prevState) => ({
       ...prevState,
       [key]: {
         ...prevState[key],
-        isSelected: !prevState[key].selected,
+        selected: !prevState[key].selected,
       },
     }));
   };
@@ -64,7 +66,7 @@ const StartPage = () => {
               values={values}
               isActive={true}
               isSelected={selected}
-              onClickPokemon={handleOpenSelected}
+              onClickPokemon={() => handleOpenSelected(key)}
             />
           )
         )}
